@@ -1,3 +1,5 @@
+// 🔽 ::: List most variables here on top
+
 var valuesToCompute   = document.getElementById("rawValuesToCompute");
 var userInputWindow   = document.getElementById("liveInputsFromUser");
 var displayedEquation = document.getElementById("formulasShownOnTop");
@@ -16,6 +18,8 @@ var carriageReturn = String.fromCharCode(13);
 var styled;
 
 
+//  🔽 ::: Get and update values on the UI 
+
 function getValuesToCompute() {
     return valuesToCompute.innerText;
 }
@@ -27,6 +31,9 @@ function computeTheseValues(num) {
 function getValueOnScreen() {
     return userInputWindow.innerText;
 }
+
+
+//  🔽 ::: Replace the standard operators with their unicode equivalent.
 
 function styleTheOperators(styled) {
   
@@ -49,6 +56,9 @@ function styleTheOperators(styled) {
     }     
   return styled;
 }
+
+
+//  🔽 ::: 'Save' user keystrokes to the backroom
 
 function sendThisToBackR(num) {
     if (Number(num)) {
@@ -85,6 +95,9 @@ function sendThisToBackR(num) {
 
 }
 
+
+//  🔽 ::: Update the 'formula' displayed on the upper panel of the calc screen
+
 function getCurrentEquation() {
     return displayedEquation.innerText;
 }
@@ -102,6 +115,9 @@ function updateCurrentEquation(num) {
 function clearDisplayedEquation() {
     displayedEquation.innerText = "";
 }
+
+
+//  🔽 ::: Functions to style and format the numbers before displaying to the user
 
 function insertCommas(num) {
 
@@ -154,8 +170,6 @@ function forceNumbersToRightAlign() {
   userInputWindow.scrollLeft = 200000 ;
 }
 
-
-
 function checkIfDotIsNeeded() {
     var userInput = getValueOnScreen();
     if (userInput.includes(".")) {
@@ -165,10 +179,16 @@ function checkIfDotIsNeeded() {
     }
 }
 
+
+//  🔽 ::: Enable or disable keys based on certain conditions
+
 function setStatusOfThisKey(key,status) {
   if (status == "enabled") { key.classList.remove("ignore"); }
   else { key.classList.add("ignore"); }
 }
+
+
+//  🔽 ::: Attach functions to the number keys
 
 setStatusOfThisKey( thePercntKey, "disabled");
 var number = document.getElementsByClassName("number");
@@ -205,6 +225,9 @@ for (var i = 0; i < number.length; i++) {
     });
 }
 
+
+//  🔽 ::: Attach functions to the operator keys 
+
 var operator = document.getElementsByClassName("operator");
 
 for (var i = 0; i < operator.length; i++) {
@@ -212,6 +235,9 @@ for (var i = 0; i < operator.length; i++) {
         var userInput = getValueOnScreen();
         var forComputation = getValuesToCompute();
 
+        
+//  🔽 ::: CLEAR key
+        
         if (this.id == "clear") {
             userInput = "";
             showThisOnScreen("");
@@ -221,7 +247,9 @@ for (var i = 0; i < operator.length; i++) {
             checkIfDotIsNeeded();
             setStatusOfThisKey( theDeleteKey, "enabled"); 
           
-          
+ 
+//  🔽 ::: BACKSPACE
+            
         } else if (this.id == "backspace") {
             if (userInput) {
                 userInput = userInput.substr(0, userInput.length - 1);
@@ -237,6 +265,9 @@ for (var i = 0; i < operator.length; i++) {
             userInput = getValueOnScreen();
             forComputation = getValuesToCompute();
 
+            
+//  🔽 ::: If bottom panel has no input but top panel has equation             
+            
             if (userInput == "" && forComputation != "") {
 
                 if (isNaN(forComputation[forComputation.length - 1])) {
@@ -244,13 +275,17 @@ for (var i = 0; i < operator.length; i++) {
                 }
             }
 
+            
+//  🔽 ::: If both bottom and top panel are not empty
+            
             if (userInput != "" || forComputation != "") {
 
                 userInput = userInput == "" ? userInput : removeCommas(userInput);
                 forComputation = forComputation + userInput;
 
 
-
+//  🔽 ::: If EQUALS and PERCENT keys are pressed
+                
                 if (this.id == "=" || this.id == "%" ) {
                     
                     var current = getCurrentEquation();
@@ -305,6 +340,9 @@ for (var i = 0; i < operator.length; i++) {
                     lastFunctionUsed = "=";
                 } else {
 
+                    
+//  🔽 ::: If any other operator keys are pressed ( + - * / )                    
+                    
                     sendThisToBackR(
                         insertCommas(userInput) + carriageReturn + this.id
                     );
@@ -326,7 +364,9 @@ for (var i = 0; i < operator.length; i++) {
                     setStatusOfThisKey( theDeleteKey, "enabled");
                     if(this.id == "%") { setStatusOfThisKey( decimalPoint, "disabled"); }
 
-
+                    
+//  🔽 ::: If operator keys are pressed, but the bottom panel is empty
+                    
                     if (userInput == "") {
                         var beautified = forComputation
                             .replace(/\+/g, ' + ')
@@ -352,6 +392,9 @@ for (var i = 0; i < operator.length; i++) {
         }
     });
 }
+
+
+//  🔽 ::: If user presses the button to show history
 
 document.getElementById("OrangeTopButton").onclick = function() {
     backRoomHistory.classList.toggle("styled-lightbox");
