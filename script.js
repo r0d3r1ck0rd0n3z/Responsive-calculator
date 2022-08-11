@@ -150,6 +150,7 @@ function showThisOnScreen(num) {
         else if(num.endsWith(".")) {
           userInputWindow.innerText = num;
         } 
+      
         // handler for values with decimal points
         else if(/\.[0]+/.test(num) || /\.\d+[0]+/.test(num) ) {   
           var sliced = num.split(".");
@@ -203,7 +204,7 @@ for (var i = 0; i < number.length; i++) {
         userInput = userInput + keyPressed;
         setStatusOfThisKey( theDeleteKey, "enabled");
 
-        // If equals was pressed again, just forward the user input to the top panel
+        // If equals was pressed again, just forward the current user input to the top panel
         if (equalsWasPressed == 1) {
             showThisOnScreen("");
             clearDisplayedEquation();
@@ -212,7 +213,7 @@ for (var i = 0; i < number.length; i++) {
       
         forceNumbersToRightAlign();
      
-        // handler for values with decimal points
+        // Fix for values with decimal points 
         userInput = userInput
           .replace(/[^\d.-]/g, "")
           .replace(/(\d+\.\d+)(\.)(\d+)/, "$1$3")
@@ -252,7 +253,7 @@ for (var i = 0; i < operator.length; i++) {
             setStatusOfThisKey( theDeleteKey, "enabled"); 
           
  
-//  🔽 ::: BACKSPACE
+//  🔽 ::: BACKSPACE key
             
         } else if (this.id == "backspace") {
             if (userInput) {
@@ -334,7 +335,7 @@ for (var i = 0; i < operator.length; i++) {
                         carriageReturn
                     );
 
-
+                    // If equals was pressed again, just forward the current user input to the top panel
                     if (lastFunctionUsed == "=") {
                         displayedEquation.innerText = insertCommas(userInput);
                         setStatusOfThisKey( thePercntKey, "disabled");
