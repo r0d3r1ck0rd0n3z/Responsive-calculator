@@ -72,6 +72,7 @@ function sendThisToBackR(num) {
 
   if(styled.startsWith("0\r",0)) { styled.replace(/0\\r/g,""); }
   
+    // if bottom panel has no value, but user presses an operator key 
     switch (styled) {
         case "0\r + ":
             styled = "+";
@@ -149,7 +150,8 @@ function showThisOnScreen(num) {
         else if(num.endsWith(".")) {
           userInputWindow.innerText = num;
         } 
-        else if(/\.[0]+/.test(num) || /\.\d+[0]+/.test(num) ) {
+        // handler for values with decimal points
+        else if(/\.[0]+/.test(num) || /\.\d+[0]+/.test(num) ) {   
           var sliced = num.split(".");
           var leftSide  = insertCommas(sliced[0]);
           var rightSide = sliced[1];
@@ -201,6 +203,7 @@ for (var i = 0; i < number.length; i++) {
         userInput = userInput + keyPressed;
         setStatusOfThisKey( theDeleteKey, "enabled");
 
+        // If equals was pressed again, just forward the user input to the top panel
         if (equalsWasPressed == 1) {
             showThisOnScreen("");
             clearDisplayedEquation();
@@ -209,6 +212,7 @@ for (var i = 0; i < number.length; i++) {
       
         forceNumbersToRightAlign();
      
+        // handler for values with decimal points
         userInput = userInput
           .replace(/[^\d.-]/g, "")
           .replace(/(\d+\.\d+)(\.)(\d+)/, "$1$3")
@@ -290,7 +294,9 @@ for (var i = 0; i < operator.length; i++) {
                     
                     var current = getCurrentEquation();
                     updateCurrentEquation(insertCommas(userInput));
-                    setStatusOfThisKey( theDeleteKey, "disabled");                  
+                    setStatusOfThisKey( theDeleteKey, "disabled");
+                    
+                    // If PERCENT key was pressed, add '0.01' to the values for computation
                     if ( this.id == "%" ) {
                         forComputation += "*0.01";
                         current = current + " " + userInput + " % ";
@@ -303,7 +309,8 @@ for (var i = 0; i < operator.length; i++) {
                     var result = eval(forComputation);
                     showThisOnScreen(result);
                     forceNumbersToRightAlign();
-                  
+                    
+                  // This is just to minimize floating point errors
                   try {
                   var countDecimals = result.toString().split(".");
                   if(countDecimals[1].length > 11) { 
